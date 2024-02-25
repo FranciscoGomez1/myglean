@@ -1,0 +1,4 @@
+141     augroup CopyAndCreateAutocmd
+    1         autocmd!
+    2         autocmd BufWinEnter * if bufnr('%') !=# g:current_buffer && bufname('%') != '' | call append(line('$'), ["const Filename = ({}) => {", "  //the selected text?"
+    3     augroup END

@@ -1,4 +1,4 @@
-  function! CopyAndCreate()
+unction! CopyAndCreate()
       " Save current cursor position
       "let save_cursor = getpos('.')
   
@@ -13,6 +13,7 @@
   
       " Copy selected text to register
       let @r = @"
+      let g:text = @r
       
       " Open file explorer
       Explore
@@ -24,7 +25,7 @@
       " Define autocmd to run after file is opened
       augroup CopyAndCreateAutocmd
           autocmd!
-          autocmd BufWinEnter * if bufnr('%') !=# g:current_buffer && bufname('%') != '' | call append(line('$'), ["const Filename = ({}) => {", "  //the selected text?"]) |
+          autocmd BufWinEnter * if bufnr('%') !=# g:current_buffer && bufname('%') != '' | call Write(text) | endif
       augroup END 
   
       " Restore cursor position
@@ -32,4 +33,12 @@
   
       " Go back to original window
       execute g:current_window . 'wincmd w'
+  endfunction
+
+  function Write(text)
+    echom  a:text
+    call append(line('$'), ["const Filename = ({}) => {", "  //the selected text?"])
+    call cursor('$', 4)
+    execute 'normal! "rp'
+    call append(line('$'), ["}", "export default Filename"])
   endfunction

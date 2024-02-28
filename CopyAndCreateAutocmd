@@ -1,4 +1,35 @@
-141     augroup CopyAndCreateAutocmd
-    1         autocmd!
-    2         autocmd BufWinEnter * if bufnr('%') !=# g:current_buffer && bufname('%') != '' | call append(line('$'), ["const Filename = ({}) => {", "  //the selected text?"
-    3     augroup END
+  function! CopyAndCreate()
+      " Save current cursor position
+      "let save_cursor = getpos('.')
+  
+      " Visual mode to select text
+      normal! gv
+  
+      " delete the selected text
+      normal d 
+  
+      " Save file
+      execute ":w"
+  
+      " Copy selected text to register
+      let @r = @"
+      
+      " Open file explorer
+      Explore
+  
+      " Save current window and buffer
+      let g:current_window = winnr()
+      let g:current_buffer = bufnr('%')
+  
+      " Define autocmd to run after file is opened
+      augroup CopyAndCreateAutocmd
+          autocmd!
+          autocmd BufWinEnter * if bufnr('%') !=# g:current_buffer && bufname('%') != '' | call append(line('$'), ["const Filename = ({}) => {", "  //the selected text?"]) |
+      augroup END 
+  
+      " Restore cursor position
+      " call setpos('.', save_cursor)
+  
+      " Go back to original window
+      execute g:current_window . 'wincmd w'
+  endfunction

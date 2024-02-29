@@ -1,4 +1,4 @@
-unction! CopyAndCreate()
+  function! CopyAndCreate()
       " Save current cursor position
       "let save_cursor = getpos('.')
   
@@ -6,7 +6,7 @@ unction! CopyAndCreate()
       normal! gv
   
       " delete the selected text
-      normal d 
+      normal d
   
       " Save file
       execute ":w"
@@ -14,7 +14,7 @@ unction! CopyAndCreate()
       " Copy selected text to register
       let @r = @"
       let g:text = @r
-      
+  
       " Open file explorer
       Explore
   
@@ -26,7 +26,7 @@ unction! CopyAndCreate()
       augroup CopyAndCreateAutocmd
           autocmd!
           autocmd BufWinEnter * if bufnr('%') !=# g:current_buffer && bufname('%') != '' | call Write(text) | endif
-      augroup END 
+      augroup END
   
       " Restore cursor position
       " call setpos('.', save_cursor)
@@ -35,10 +35,25 @@ unction! CopyAndCreate()
       execute g:current_window . 'wincmd w'
   endfunction
 
-  function Write(text)
-    echom  a:text
-    call append(line('$'), ["const Filename = ({}) => {", "  //the selected text?"])
-    call cursor('$', 4)
-    execute 'normal! "rp'
-    call append(line('$'), ["}", "export default Filename"])
+  function Clean_file_name(current_filename)
+    let newString = ""
+    for character in a:current_filename
+       if character !=# '.'
+         let newString .=character
+       else
+         break
+       endif
+    endfor
+    return newString
   endfunction
+  
+  " Map a key to call the function
+  nnoremap <leader>n :call CopyAndCreate()<CR>
+  
+  " Map a key to call the function nnoremap <leader>n :call CopyAndCreate()<CR>
+  
+  function! PasteSelectedText(selected_text)
+      " Paste the copied text
+      call setline(1, split(a:selected_text, "\n"))
+  endfunction
+

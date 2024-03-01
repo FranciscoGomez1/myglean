@@ -34,7 +34,7 @@
       " Go back to original window
       execute g:current_window . 'wincmd w'
   endfunction
-
+" Clean the file name to drop the file extension
   function Clean_file_name(current_filename)
     let newString = ""
     for character in a:current_filename

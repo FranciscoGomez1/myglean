@@ -34,6 +34,19 @@
       " Go back to original window
       execute g:current_window . 'wincmd w'
   endfunction
+
+function Write(text)
+    let current_filename = expand('%:t')
+    let file_name = Clean_file_name(current_filename) 
+    echom  a:text
+    echom "Current filename: " . current_filename
+    echom "Current name: " . file_name
+    call append(line('$'), ["const " . file_name . " = ({}) => {", "  //the selected text?"])
+    call cursor('$', 4)
+    execute 'normal! "rp'
+    call append(line('$'), ["}", "export default " . file_name])
+  endfunction
+
 " Clean the file name to drop the file extension
   function Clean_file_name(current_filename)
     let newString = ""
